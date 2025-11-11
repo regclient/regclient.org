@@ -22,11 +22,12 @@ See the [Image References](/usage/#image-references) documentation for details o
 
 ## Configuration File
 
-A minimal example that copies a few images from to your local registry looks like:
+An example that copies a few images from to your local registry looks like:
 
 ```yaml
 version: 1 # optional for v1 files, there is no v2 yet
 creds:
+  # credentials are only needed for logins that are not stored in the docker config
   - registry: registry.example.org
     user: syncuser
     pass: 'Pa$$w0rd' # typically you would store secrets outside of this file
@@ -42,14 +43,14 @@ sync:
   - source: alpine
     target: registry.example.org/library/alpine
     type: repository
-    tags:
-      allow:
-      - "latest"
-      - "edge"
-      - "3"
-      - "3\\.\\d+"
-      deny:
-      - "3\\.0" # deny can be used to remove matches from the allow list
+    tagSets: # tag sets allow multiple criteria 
+      - allow: # first set of tags is a fixed list of tags
+        - "latest"
+        - "edge"
+      - semverRange: # second set of tags is only patch tags in a specific semver range
+        - ">=3.5.1 <4.0"
+        allow:
+        - 'v\d+\.\d+\.\d+'
   - source: ghcr.io/regclient/regctl
     target: registry.example.org/regclient/regctl
     type: repository
@@ -336,14 +337,29 @@ sync:
       Regex to deny specific repositories.
 
   - `tags` (optional, object):
-    Implements filters on tags for "registry" and "repository" types
+    Implements filters on tags for "registry" and "repository" types.
     Regex values are automatically bound to the beginning and ending of each string (`^` and `$`).
+    A tag much match each criteria to be included, so a rule to `allow: ["latest"]` and `deny: ["dev"]` would not match any tags.
+    See `tagSets` for defining multiple sets of tag criteria.
 
     - `allow` (optional, array of strings):
       Regex to allow specific tags.
+      Multiple regex strings are combine with OR logic.
 
     - `deny` (optional, array of strings):
       Regex to deny specific tags.
+      Multiple regex strings are combine with OR logic.
+
+    - `semverRange` (optional, array of strings):
+      Semantic version constraints to filter by version ranges.
+      Space separated ranges within the same string are combine with AND logic.
+      Separate range strings are combine with OR logic.
+      See [Semantic Version Filtering](#semantic-version-filtering-for-tags) for syntax details.
+
+  - `tagSets` (optional, array of objects):
+    Implements filters on tags for "registry" and "repository" types.
+    This is an array of `tags` entries, where each entry is combine with OR logic.
+    This allows `allow` and `deny` to include fixed names and also `semverRange` to be used for a version range.
 
 ### User Extensions
 
@@ -374,6 +390,33 @@ sync:
     type: image
     backup: *backup
 ```
+
+## Semantic Version Filtering for Tags
+
+Semver filtering on tags compares a dot separated version numbers and the optional prerelease data.
+
+- Operators are included in front of the version number.
+- A leading `v` on the version number is permitted.
+- Values after a `-` are treated as prereleases, e.g. `v1.2.3-alpha` or `v1.2.3-rc4`.
+  Prerelease comparisons would also include other content after a `-`, e.g. `v1.2.3-alpine` or `v1.2.3-dev`, so additional `allow` or `deny` filters may be needed to limit matched tags.
+- Multiple constraints on the version are specified with a space separator to define a range.
+  For example, `>=1.2.3 <2.0.0` specifies every version starting at `v1.2.3` but less than `v2.0.0`.
+- Any value that cannot be parsed as a version number is excluded from the filtered tags.
+
+Operators:
+
+| Syntax | Description |
+|--------|-------------|
+|  `=1.2.3` | Exactly version 1.2.3 |
+|   `1.2.3` | No operator is treated as equal, equivalent to `=1.2.3` |
+|  `>1.2.3` | Greater than 1.2.3 |
+|  `<1.2.3` | Less than 1.2.3 |
+| `>=1.2.3` | Greater than or equal to 1.2.3 |
+| `<=1.2.3` | Less than or equal to 1.2.3 |
+|  `~1.2.3` | Patch releases up to the next minor release, equivalent to `>=1.2.3 <1.3.0` |
+|  `^1.2.3` | Major releases, equivalent to `>=1.2.3 <2.0.0` |
+|  `^0.2.3` | Major releases with a `0.x` version are limited to the next minor release, equivalent to `>=0.2.3 <0.3.0` |
+|  `^0.0.3` | Major releases with a `0.0.x` version are limited to the next patch release, equivalent to `>=0.0.3 <0.0.4` |
 
 ## Templates
 
