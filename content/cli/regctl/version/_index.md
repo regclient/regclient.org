@@ -6,7 +6,7 @@ warning: Auto generated content
 
 ## Synopsis
 
-Show the version of regctl
+Show the version of regctl. Note that docker image builds will always be marked "dirty".
 
 ```shell
 regctl version [flags]
