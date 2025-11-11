@@ -6,10 +6,20 @@ warning: Auto generated content
 
 ## Synopsis
 
-Show the version
+Show the version of regbot. Note that docker image builds will always be marked "dirty".
 
 ```shell
 regbot version [flags]
+```
+
+## Examples
+
+```shell
+# display full version details
+regbot version
+
+# retrieve the version number
+regbot version --format '{{.VCSTag}}'
 ```
 
 ## Options

@@ -10,6 +10,7 @@ manage repositories
 
 ## Available Commands
 
+- [regctl repo copy](./copy)
 - [regctl repo ls](./ls)
 
 ## Options from parent commands

@@ -6,10 +6,20 @@ warning: Auto generated content
 
 ## Synopsis
 
-Show the version
+Show the version of regsync. Note that docker image builds will always be marked "dirty".
 
 ```shell
 regsync version [flags]
+```
+
+## Examples
+
+```shell
+# display full version details
+regsync version
+
+# retrieve the version number
+regsync version --format '{{.VCSTag}}'
 ```
 
 ## Options
