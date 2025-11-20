@@ -160,18 +160,43 @@ cosign verify \
 For binaries:
 
 ```shell
-curl -L https://github.com/regclient/regclient/releases/latest/download/regctl-linux-amd64 >regctl
-chmod 755 regctl
+cmd=regctl
+arch=linux-amd64
+curl -L https://github.com/regclient/regclient/releases/latest/download/${cmd}-${arch} >${cmd}
+chmod 755 ${cmd}
 curl -L https://github.com/regclient/regclient/releases/latest/download/metadata.tgz >metadata.tgz
-tar -xzf metadata.tgz regctl-linux-amd64.pem regctl-linux-amd64.sig
+tar -xzf metadata.tgz ${cmd}-${arch}.pem ${cmd}-${arch}.sig
 cosign verify-blob \
   --certificate-oidc-issuer https://token.actions.githubusercontent.com \
   --certificate-identity-regexp https://github.com/regclient/regclient/.github/workflows/ \
-  --certificate regctl-linux-amd64.pem \
-  --signature regctl-linux-amd64.sig \
-  regctl
-rm metadata.tgz regctl-linux-amd64.pem regctl-linux-amd64.sig
+  --certificate ${cmd}-${arch}.pem \
+  --signature ${cmd}-${arch}.sig \
+  ${cmd}
+rm metadata.tgz ${cmd}-${arch}.pem ${cmd}-${arch}.sig
 ```
+
+Starting in regclient v0.10.1, signatures are also provided using sigstore bundles.
+To facilitate the migration to bundles, the previous signatures will still be distributed for several releases and a deprecation notice will be provided in the release notes.
+To verify signatures using the sigstore bundles, use the following commands:
+
+```shell
+cmd=regctl
+arch=linux-amd64
+curl -L https://github.com/regclient/regclient/releases/latest/download/${cmd}-${arch} >${cmd}
+chmod 755 ${cmd}
+curl -L https://github.com/regclient/regclient/releases/latest/download/metadata.tgz >metadata.tgz
+tar -xzf metadata.tgz ${cmd}-${arch}.sigstore.json
+cosign verify-blob \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  --certificate-identity-regexp https://github.com/regclient/regclient/.github/workflows/ \
+  --bundle ${cmd}-${arch}.sigstore.json \
+  ${cmd}
+rm metadata.tgz ${cmd}-${arch}.sigstore.json
+```
+
+Note that the command to verify image signatures is unchanged.
+Cosign v3 automatically verifies images using the new bundles by default, but will fallback for images signed with the previous method.
+With cosign v2, you may want to include `--new-bundle-format` on the verify command for efficiency.
 
 ## Reproducible Builds
 
@@ -186,23 +211,25 @@ This requires the following:
 ```shell
 make oci-image
 
-# compare regctl digests to edge/main
+tag=edge
+
+# compare regctl digests the requested tag
 regctl image digest ocidir://output/regctl:scratch
-regctl image digest ghcr.io/regclient/regctl:edge
+regctl image digest ghcr.io/regclient/regctl:${tag}
 regctl image digest ocidir://output/regctl:alpine
-regctl image digest ghcr.io/regclient/regctl:edge-alpine
+regctl image digest ghcr.io/regclient/regctl:${tag#latest}-alpine
 
-# compare regsync digests to edge/main
+# compare regsync digests the requested tag
 regctl image digest ocidir://output/regsync:scratch
-regctl image digest ghcr.io/regclient/regsync:edge
+regctl image digest ghcr.io/regclient/regsync:${tag}
 regctl image digest ocidir://output/regsync:alpine
-regctl image digest ghcr.io/regclient/regsync:edge-alpine
+regctl image digest ghcr.io/regclient/regsync:${tag#latest}-alpine
 
-# compare regbot digests to edge/main
+# compare regbot digests the requested tag
 regctl image digest ocidir://output/regbot:scratch
-regctl image digest ghcr.io/regclient/regbot:edge
+regctl image digest ghcr.io/regclient/regbot:${tag}
 regctl image digest ocidir://output/regbot:alpine
-regctl image digest ghcr.io/regclient/regbot:edge-alpine
+regctl image digest ghcr.io/regclient/regbot:${tag#latest}-alpine
 ```
 
 To verify an arbitrary image, a convenience shell script is available:
