@@ -405,17 +405,17 @@ Semver filtering on tags compares a dot separated version numbers and the option
 
 Operators:
 
-| Syntax | Description |
-|--------|-------------|
-|  `=1.2.3` | Exactly version 1.2.3 |
-|   `1.2.3` | No operator is treated as equal, equivalent to `=1.2.3` |
-|  `>1.2.3` | Greater than 1.2.3 |
-|  `<1.2.3` | Less than 1.2.3 |
-| `>=1.2.3` | Greater than or equal to 1.2.3 |
-| `<=1.2.3` | Less than or equal to 1.2.3 |
-|  `~1.2.3` | Patch releases up to the next minor release, equivalent to `>=1.2.3 <1.3.0` |
-|  `^1.2.3` | Major releases, equivalent to `>=1.2.3 <2.0.0` |
-|  `^0.2.3` | Major releases with a `0.x` version are limited to the next minor release, equivalent to `>=0.2.3 <0.3.0` |
+| Syntax    | Description                                                                                                 |
+| --------: | ----------------------------------------------------------------------------------------------------------- |
+|  `=1.2.3` | Exactly version 1.2.3                                                                                       |
+|   `1.2.3` | No operator is treated as equal, equivalent to `=1.2.3`                                                     |
+|  `>1.2.3` | Greater than 1.2.3                                                                                          |
+|  `<1.2.3` | Less than 1.2.3                                                                                             |
+| `>=1.2.3` | Greater than or equal to 1.2.3                                                                              |
+| `<=1.2.3` | Less than or equal to 1.2.3                                                                                 |
+|  `~1.2.3` | Patch releases up to the next minor release, equivalent to `>=1.2.3 <1.3.0`                                 |
+|  `^1.2.3` | Major releases, equivalent to `>=1.2.3 <2.0.0`                                                              |
+|  `^0.2.3` | Major releases with a `0.x` version are limited to the next minor release, equivalent to `>=0.2.3 <0.3.0`   |
 |  `^0.0.3` | Major releases with a `0.0.x` version are limited to the next patch release, equivalent to `>=0.0.3 <0.0.4` |
 
 ## Templates

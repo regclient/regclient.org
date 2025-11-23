@@ -1,0 +1,22 @@
+name: Version Check
+
+on:
+  schedule:
+    - cron: '0 05 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Version Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      - name: Version Check
+        uses: docker://ghcr.io/sudo-bmitch/version-bump:edge
+        with:
+          args: check
