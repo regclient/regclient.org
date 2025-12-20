@@ -14,6 +14,7 @@ date: 2025-01-01
   - [Brew](#brew)
   - [MacPorts](#macports)
   - [RPM](#rpm)
+  - [Scoop](#scoop)
   - [Snap](#snap)
   - [Wolfi](#wolfi)
 
@@ -268,6 +269,15 @@ RHEL / Centos / Rocky / Fedora
 
 ```shell
 dnf install regclient
+```
+
+### Scoop
+
+<https://github.com/ScoopInstaller/Extras/blob/master/bucket/regclient.json>
+
+```shell
+scoop bucket add extras
+scoop install regclient
 ```
 
 ### Snap
