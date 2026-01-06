@@ -17,8 +17,9 @@ All `regctl` commands have a `--help` flag that shows available child commands, 
 ## Configuring Registries
 
 Registries you access may have different configurations, including login credentials, TLS, and mirrors.
-By default, `regctl` will pull credentials from Docker, and use sensible defaults.
-There are two options to setup a registry, persistent in the `${HOME}/.regctl/config.json` file, or per command with the `--host` option.
+By default, `regctl` will include credentials from Docker, and use sensible defaults.
+Some `regctl` commands will persist registry configurations to a file, `${HOME}/.regctl/config.json` by default, which can be overridden with the `$REGCTL_CONFIG` environment variable.
+Individual commands can change settings with the `--host` option.
 
 ### Persistent Configuration
 
