@@ -1,7 +1,7 @@
 {"name":"gha-uses-commit","key":"https://github.com/actions/checkout.git:v6.0.2","version":"de0fac2e4500dabe0009e67214ff5f5447ce83dd"}
 {"name":"gha-uses-semver","key":"https://github.com/actions/checkout.git","version":"v6.0.2"}
 {"name":"makefile-geekdoc-theme","key":"https://github.com/thegeeklab/hugo-geekdoc.git","version":"v2.0.0"}
-{"name":"makefile-hugo","key":"https://github.com/gohugoio/hugo.git","version":"v0.154.5"}
+{"name":"makefile-hugo","key":"https://github.com/gohugoio/hugo.git","version":"v0.155.1"}
 {"name":"makefile-markdown-lint","key":"docker.io/davidanson/markdownlint-cli2","version":"v0.20.0"}
-{"name":"netlify-hugo","key":"https://github.com/gohugoio/hugo.git","version":"0.154.5"}
+{"name":"netlify-hugo","key":"https://github.com/gohugoio/hugo.git","version":"0.155.1"}
 {"name":"netlify-node","key":"https://github.com/nodejs/node.git","version":"25"}
