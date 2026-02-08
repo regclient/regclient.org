@@ -1,7 +1,7 @@
 DOCKER?=$(shell command -v docker 2>/dev/null)
 HUGO?=$(shell command -v hugo 2>/dev/null)
 HUGO_CMD_VER:=$(shell [ -x "$(HUGO)" ] && echo "$$($(HUGO) version | awk '{print $$2}')" || echo "0")
-HUGO_VERSION?=v0.155.1
+HUGO_VERSION?=v0.155.3
 HUGO_CONTAINER?=ghcr.io/gohugoio/hugo:$(HUGO_VERSION)
 ifneq "$(HUGO_CMD_VER)" "$(HUGO_VERSION)"
 	ifneq "$(strip $(DOCKER))" ""
