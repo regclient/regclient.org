@@ -7,7 +7,7 @@ warning: Auto generated content
 ## Synopsis
 
 Utility for accessing docker registries
-More details at <https://github.com/regclient/regclient>
+More details at <https://regclient.org>
 
 ## Available Commands
 
