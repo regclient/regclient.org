@@ -6,7 +6,10 @@ warning: Auto generated content
 
 ## Synopsis
 
-manage registries
+Retrieve or update registry configurations.
+By default, the configuration is loaded from $HOME/.regctl/config.json.
+This location can be overridden with the REGCTL_CONFIG environment variable.
+Note that these commands do not include logins imported from Docker or values injected with --host.
 
 ## Available Commands
 
