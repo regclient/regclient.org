@@ -1,7 +1,7 @@
 DOCKER?=$(shell command -v docker 2>/dev/null)
 HUGO?=$(shell command -v hugo 2>/dev/null)
 HUGO_CMD_VER:=$(shell [ -x "$(HUGO)" ] && echo "$$($(HUGO) version | awk '{print $$2}')" || echo "0")
-HUGO_VERSION?=v0.159.1
+HUGO_VERSION?=v0.160.0
 HUGO_CONTAINER?=ghcr.io/gohugoio/hugo:$(HUGO_VERSION)
 ifneq "$(HUGO_CMD_VER)" "$(HUGO_VERSION)"
 	ifneq "$(strip $(DOCKER))" ""
@@ -11,7 +11,7 @@ ifneq "$(HUGO_CMD_VER)" "$(HUGO_VERSION)"
 			$(HUGO_CONTAINER)
 	endif
 endif
-THEME_VERSION?=v2.0.1
+THEME_VERSION?=v3.0.0
 THEME?=hugo-geekdoc
 CLI_CMDS?=regctl regsync regbot
 MARKDOWN_LINT_VER?=v0.22.0
