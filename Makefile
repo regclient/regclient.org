@@ -14,7 +14,7 @@ endif
 THEME_VERSION?=v3.0.0
 THEME?=hugo-geekdoc
 CLI_CMDS?=regctl regsync regbot
-MARKDOWN_LINT_VER?=v0.22.0
+MARKDOWN_LINT_VER?=v0.22.1
 VER_BUMP?=$(shell command -v version-bump 2>/dev/null)
 VER_BUMP_CONTAINER?=sudobmitch/version-bump:edge
 ifeq "$(strip $(VER_BUMP))" ''
