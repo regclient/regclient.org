@@ -11,7 +11,7 @@ ifneq "$(HUGO_CMD_VER)" "$(HUGO_VERSION)"
 			$(HUGO_CONTAINER)
 	endif
 endif
-THEME_VERSION?=v3.0.0
+THEME_VERSION?=v4.1.0
 THEME?=hugo-geekdoc
 CLI_CMDS?=regctl regsync regbot
 MARKDOWN_LINT_VER?=v0.22.1
