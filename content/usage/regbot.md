@@ -306,8 +306,11 @@ The following additional functions are available:
 
   e.g. `list = repo.ls("example.com", {limit = 500})`
 
-- `tag.ls <repo>`:
+- `tag.ls <repo> [opts]`:
   Returns an array of tags found within a repository.
+  Opts is a table that can have the following values set:
+  - `limit`: number of results to return
+  - `last`: last received tag, next batch of results will start after this
 
 - `tag.delete <ref>`:
   Deletes a tag from a registry.
