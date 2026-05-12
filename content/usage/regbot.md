@@ -316,6 +316,9 @@ The following additional functions are available:
   Deletes a tag from a registry.
   This uses the regclient tag delete method that first pushes a dummy manifest to the tag, which avoids deleting other tags that point to the same manifest.
 
+- `manifest.descriptor`:
+  Returns the descriptor of a manifest. A descriptor contains fields like `digest`. Please check out [the documentation](https://pkg.go.dev/github.com/regclient/regclient/types/descriptor#Descriptor) for a full list of fields.
+
 - `manifest.get`:
   Returns the image manifest.
   The current platform will be resolved, or it may be specified as a second arg.
@@ -338,6 +341,9 @@ The following additional functions are available:
   Deletes a manifest.
   Note that a manifest list or manifest head request to retrieve the manifest is recommended, otherwise the registry may delete a single platform's manifest without deleting the entire multi-platform image, leading to errors when attempting to access the remaining manifest.
   If multiple tags can point to the same manifest, then using `tag.delete` is recommended.
+
+- `<manifest>:descriptor`:
+  Returns the descriptor of a manifest. See `manifest.descriptor` for more details.
 
 - `<manifest>:export`:
   Returns a new manifest created with user changes to the current manifest data (user changes are ignored by all other calls).
