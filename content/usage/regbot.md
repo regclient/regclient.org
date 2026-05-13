@@ -316,15 +316,20 @@ The following additional functions are available:
   Deletes a tag from a registry.
   This uses the regclient tag delete method that first pushes a dummy manifest to the tag, which avoids deleting other tags that point to the same manifest.
 
-- `manifest.get`:
+- `manifest.descriptor <ref or manifest>`:
+  Returns the descriptor for a given manifest.
+  The descriptor is a table containing the fields: `MediaType`, `Size`, and `Digest`.
+  You may also encounter descriptors with `ArtifactType`, `Annotations`, `Data`, `Platform`, and `URLs` defined.
+
+- `manifest.get <ref> [platform]`:
   Returns the image manifest.
   The current platform will be resolved, or it may be specified as a second arg.
 
-- `manifest.getList`:
+- `manifest.getList <ref>`:
   Retrieves a manifest list without resolving the current platform.
   If the manifest is not a multi-platform manifest list, the single manifest will be returned instead.
 
-- `manifest.head`:
+- `manifest.head <ref>`:
   Retrieves the manifest using a head request.
   This pulls the digest and current rate limit and can be used with the manifest delete and ratelimit functions.
 
@@ -338,6 +343,11 @@ The following additional functions are available:
   Deletes a manifest.
   Note that a manifest list or manifest head request to retrieve the manifest is recommended, otherwise the registry may delete a single platform's manifest without deleting the entire multi-platform image, leading to errors when attempting to access the remaining manifest.
   If multiple tags can point to the same manifest, then using `tag.delete` is recommended.
+
+- `<manifest>:descriptor`:
+  Returns the descriptor for a given manifest.
+  The descriptor is a table containing the fields: `MediaType`, `Size`, and `Digest`.
+  You may also encounter descriptors with `ArtifactType`, `Annotations`, `Data`, `Platform`, and `URLs` defined.
 
 - `<manifest>:export`:
   Returns a new manifest created with user changes to the current manifest data (user changes are ignored by all other calls).
