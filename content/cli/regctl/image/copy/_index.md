@@ -11,6 +11,10 @@ that do not exist at the target. In the same registry it attempts to mount
 the layers between repositories. And within the same repository it only
 sends the manifest with the new tag.
 
+The destination reference may include go template syntax, expanded using the
+source reference (e.g. "{{.Source.Tag}}"), allowing the destination tag to be
+derived from the source.
+
 ```shell
 regctl image copy <src_image_ref> <dst_image_ref> [flags]
 ```
@@ -25,6 +29,10 @@ regctl image copy <src_image_ref> <dst_image_ref> [flags]
 # copy an image
 regctl image copy \
   ghcr.io/regclient/regctl:edge registry.example.org/regclient/regctl:edge
+
+# retag using a template to derive the destination tag from the source
+regctl image copy \
+  ghcr.io/regclient/regctl:edge 'registry.example.org/regclient/regctl:{{.Source.Tag}}-mirror'
 
 # copy an image with signatures
 regctl image copy --digest-tags \
