@@ -45,6 +45,7 @@ regctl artifact get registry.example.org/artifact:0.0.1 --config
       --latest                          Get the most recent referrer using the OCI created annotation
   -o, --output string                   Output directory for multiple artifacts
   -p, --platform string                 Specify platform of a subject (e.g. linux/amd64 or local)
+      --slow-referrers                  Search for referrers with slower queries
       --sort-annotation string          Annotation used for sorting results
       --sort-desc                       Sort in descending order
       --strip-dirs                      Strip directories from filenames in output dir
