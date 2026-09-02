@@ -39,6 +39,7 @@ regctl artifact list registry.example.com/repo:v1 --format '{{jsonPretty .Manife
       --format string                   Format output with go template syntax (default "{{printPretty .}}")
       --latest                          Sort using the OCI created annotation
   -p, --platform string                 Specify platform (e.g. linux/amd64 or local)
+      --slow-referrers                  Search for referrers with slower queries
       --sort-annotation string          Annotation used for sorting results
       --sort-desc                       Sort in descending order
 ```

@@ -62,6 +62,7 @@ regctl image mod registry.example.org/regctl:v0.5.1-alpine \
       --annotation stringArray        set an annotation (name=value, omit value to delete, prefix with platform list [p1,p2] or [*] for all images)
       --annotation-base stringArray   set base image annotations (image/name:tag,sha256:digest)
       --annotation-promote            promote common annotations from child images to index
+      --author string                 set image author
       --buildarg-rm string            delete a build arg
       --buildarg-rm-regex string      delete a build arg with a regex value
       --config-cmd string             set command in the config (json array or string, empty string to delete)
@@ -92,8 +93,10 @@ regctl image mod registry.example.org/regctl:v0.5.1-alpine \
       --to-docker                     convert to Docker schema2 media types
       --to-oci                        convert to OCI media types
       --to-oci-referrers              convert to OCI referrers
+      --user string                   set default user (username, uid, with optional colon and group/gid value)
       --volume-add stringArray        add a volume definition
       --volume-rm stringArray         delete a volume definition
+      --workdir string                set default workdir path
 ```
 
 ## Options from parent commands

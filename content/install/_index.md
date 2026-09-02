@@ -204,33 +204,47 @@ With cosign v2, you may want to include `--new-bundle-format` on the verify comm
 Images can be rebuilt reproducibly.
 This requires the following:
 
-- source code to be cloned locally
+- source code to be cloned locally, with the commit being verified already checked out
 - docker with buildx
 - regctl
-- syft
+
+`regctl` should be built from the same version that is being verified, using the same version of the Go compiler used for that build (see `RELEASE_GO_VER` variable in `.github/workflows/go.yml`).
+Specifically, regclient release v0.11.6 and newer requires Go 1.27 or newer due to a [change in the gzip compression](https://go-review.googlesource.com/c/go/+/707355).
+Similarly, regclient releases before v0.11.6 should use a release of Go before 1.27.
+
+If `syft` is installed, SBOMs will also be generated and attached to the locally built images.
 
 ```shell
-make oci-image
+make oci-image # build all images locally, results are written to output directory
 
-tag=edge
+tag=edge # update this to match the tag you are verifying
 
-# compare regctl digests the requested tag
-regctl image digest ocidir://output/regctl:scratch
-regctl image digest ghcr.io/regclient/regctl:${tag}
-regctl image digest ocidir://output/regctl:alpine
-regctl image digest ghcr.io/regclient/regctl:${tag#latest}-alpine
+if [ "${tag}" = "latest" ]; then
+  tag_alpine="alpine"
+else
+  tag_alpine="${tag}-alpine"
+fi
 
-# compare regsync digests the requested tag
-regctl image digest ocidir://output/regsync:scratch
-regctl image digest ghcr.io/regclient/regsync:${tag}
-regctl image digest ocidir://output/regsync:alpine
-regctl image digest ghcr.io/regclient/regsync:${tag#latest}-alpine
+cmp_digest()
+{
+  if [ "$2" = "$3" ]; then
+    echo "Digest matches for $1: $2"
+  else
+    echo "MISMATCH DIGEST for $1:"
+    echo "  locally generated: $2"
+    echo "  remote value:      $3"
+  fi
+}
 
-# compare regbot digests the requested tag
-regctl image digest ocidir://output/regbot:scratch
-regctl image digest ghcr.io/regclient/regbot:${tag}
-regctl image digest ocidir://output/regbot:alpine
-regctl image digest ghcr.io/regclient/regbot:${tag#latest}-alpine
+for cmd in regctl regsync regbot; do
+  cmp_digest "${cmd} scratch" \
+    "$(regctl image digest ocidir://output/${cmd}:scratch)" \
+    "$(regctl image digest ghcr.io/regclient/${cmd}:${tag})"
+
+  cmp_digest "${cmd} alpine" \
+    "$(regctl image digest ocidir://output/${cmd}:scratch)" \
+    "$(regctl image digest ghcr.io/regclient/${cmd}:${tag})"
+done
 ```
 
 To verify an arbitrary image, a convenience shell script is available:

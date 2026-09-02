@@ -32,6 +32,7 @@ regctl artifact tree --digest-tags ghcr.io/regclient/regsync:latest
       --filter-annotation stringArray   Filter descriptors by annotation (key=value)
       --filter-artifact-type string     Filter descriptors by artifactType
       --format string                   Format output with go template syntax (default "{{printPretty .}}")
+      --slow-referrers                  Search for referrers with slower queries
 ```
 
 ## Options from parent commands
