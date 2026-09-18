@@ -361,6 +361,11 @@ sync:
     This is an array of `tags` entries, where each entry is combine with OR logic.
     This allows `allow` and `deny` to include fixed names and also `semverRange` to be used for a version range.
 
+  - `targetTag` (optional, string, templates supported):
+    Go template used to derive the target tag from each matched source tag, applied for "registry" and "repository" types.
+    When unset, the target tag defaults to the source tag.
+    See [Templates](#templates) for the fields available to this template.
+
 ### User Extensions
 
 Any field beginning with `x-` is considered a user extension and will not be parsed in current or future versions of the project.
@@ -420,7 +425,7 @@ Operators:
 
 ## Templates
 
-[Go templates](https://golang.org/pkg/text/template/) are used to expand values in `registry`, `user`, `pass`, `regcert`, `clientCert`, `clientKey`, `source`, `target`, `referrerSource`, `referrerTarget`, and `backup`.
+[Go templates](https://golang.org/pkg/text/template/) are used to expand values in `registry`, `user`, `pass`, `regcert`, `clientCert`, `clientKey`, `source`, `target`, `referrerSource`, `referrerTarget`, `backup`, and `targetTag`.
 
 For `registry`, `user`, `pass`, `regcert`, `clientCert`, and `clientKey`, no values are provided under the `.` field.
 
@@ -443,7 +448,18 @@ The `backup` template supports the following objects:
   - `.Ref.Tag`: Tag
 - `.Sync`: Values from the current sync step listed above
 
-Note that templates are expanded in the order `source`, `referrerSource`, `target`, `referrerTarget`, and then `backup`.
+The `targetTag` template is expanded once for each matched source tag, and supports the following object:
+
+- `.Source`: Reference to the source image for the tag being processed
+  - `.Source.Reference`: Full reference
+  - `.Source.Registry`: Registry name
+  - `.Source.Repository`: Repository
+  - `.Source.Tag`: Tag
+
+For example, `targetTag: "{{ .Source.Tag }}-mirror"` copies a source tag of `v1.2.3` to a target tag of `v1.2.3-mirror`.
+Template functions like `env` may also be combined to include values from the environment, e.g. `targetTag: '{{ .Source.Tag }}-{{ env "BUILD_ID" }}'`.
+
+Note that templates are expanded in the order `source`, `referrerSource`, `target`, `referrerTarget`, `backup`, and then `targetTag` (once per matched tag).
 Using a value before it has been expanded will return the template string.
 
 See [Template Functions](/usage/#Template-Functions) for more details on the custom functions available in templates.
