@@ -125,6 +125,33 @@ For example, setting up tab completion in the current bash shell, that may be se
 source <(regctl completion bash)
 ```
 
+## Target Reference Templates
+
+The destination reference for `regctl image copy` supports [Go templates](https://golang.org/pkg/text/template/), allowing the destination tag (or the full reference) to be derived from the source reference.
+The template is expanded using the source reference before it is parsed, so a destination without any `{{` syntax behaves exactly as before.
+
+The template supports the following object:
+
+- `.Source`: Reference to the source image being copied
+  - `.Source.Reference`: Full reference
+  - `.Source.Registry`: Registry name
+  - `.Source.Repository`: Repository
+  - `.Source.Tag`: Tag
+
+```console
+# copy an image, appending "-mirror" to the source tag
+regctl image copy \
+  ghcr.io/regclient/regctl:edge 'registry.example.org/regclient/regctl:{{.Source.Tag}}-mirror'
+
+# combine with the env template function to include a value from the environment
+regctl image copy \
+  ghcr.io/regclient/regctl:edge 'registry.example.org/regclient/regctl:{{.Source.Tag}}-{{env "BUILD_ID"}}'
+```
+
+Note that when the destination includes `{{` or `}}`, it should be quoted in the shell to prevent the shell from interpreting the braces.
+
+See [Template Functions](/usage/#template-functions) for more details on the custom functions available in templates.
+
 ## Format Flag
 
 The `--format` flag allows you to apply a Go template to the output of some commands.
