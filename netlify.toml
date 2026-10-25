@@ -12,3 +12,8 @@ command = "make preview-build"
 
 [context.branch-deploy]
 command = "make preview-build"
+
+[[redirects]]
+  from = "/cli/regctl/index/"
+  to = "/cli/regctl/index/index.html"
+  force = true
